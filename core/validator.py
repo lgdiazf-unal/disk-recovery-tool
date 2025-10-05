@@ -2,10 +2,11 @@
 Script que permite validar mediante reglas si el archivo es xlsx
 """
 
-from zipfile import ZipFile
+from zipfile import ZipFile,BadZipFile
 import subprocess
 import sys
 import os
+from openpyxl import load_workbook
 
 def reparar_archivo(archivo_entrada, archivo_salida):
     """
@@ -27,7 +28,7 @@ def reparar_archivo(archivo_entrada, archivo_salida):
     
     return error
 
-def validar_archivo(archivo, carpeta_estructura, archivo_estructura):
+def validar_archivo(archivo, carpeta_estructura, archivo_estructura, validacion="open"):
 
     """
     Funcion que valida si tiene la estructura de un archivo xlsx valido para la lectura
@@ -36,24 +37,52 @@ def validar_archivo(archivo, carpeta_estructura, archivo_estructura):
     carpeta_presente = False
     archivo_presente = False
 
-    with ZipFile(f"{archivo}", 'r') as zip_ref:
+    if validacion == "open":
 
-        for file_name in zip_ref.namelist():
-            print(f"validando el archivo {file_name}")
+        try:
+            wb = load_workbook(archivo)
+            print("File is valid and can be opened.")
+            return True
+        
+        except BadZipFile:
+            print("File is not a valid ZIP archive, hence not a valid .xlsx file.")
+            return False
+        
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return False
+    else:
 
-            nombre = file_name.split("/")
+        with ZipFile(f"{archivo}", 'r') as zip_ref:
 
-            if nombre[0] == carpeta_estructura:
-                carpeta_presente = True
-            
-            if file_name == archivo_estructura:
-                archivo_presente = True
+            for file_name in zip_ref.namelist():
+                print(f"validando el archivo {file_name}")
 
-            if archivo_presente and carpeta_presente:
+                nombre = file_name.split("/")
 
-                valido = True
-                break
+                if nombre[0] == carpeta_estructura:
+                    carpeta_presente = True
+                
+                if file_name == archivo_estructura:
+                    archivo_presente = True
+
+                if archivo_presente and carpeta_presente:
+
+                    valido = True
+                    break
     return valido
+
+def validate_xlsx_file(filepath):
+    try:
+        wb = load_workbook(filepath)
+        print("File is valid and can be opened.")
+        return True
+    except BadZipFile:
+        print("File is not a valid ZIP archive, hence not a valid .xlsx file.")
+        return False
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return False
 
 
 def main(archivo_entrada, archivo_salida, carpeta_estructura="xl", archivo_estructura="[Content_Types].xml"):

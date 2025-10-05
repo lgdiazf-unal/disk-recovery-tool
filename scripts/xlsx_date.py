@@ -52,7 +52,7 @@ def get_xlsx_dates(archivo):
                     'error' : str(e)
                 }
 
-def get_year(metadata, dato="created"):
+def get_year(metadata, dato="modified"):
     """
     Funcion que retorna el year
     """
