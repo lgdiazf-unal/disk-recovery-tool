@@ -11,6 +11,6 @@ find "$CARPETA" -type f -name "*.xlsx" | while IFS= read -r archivo; do
     
     NOMBRE_ARCHIVO=$(basename "$archivo")
 
-    echo "$BIN_PYTHON $SCRIPT_PYTHON $archivo $CARPETA_DESTINO"
+    $BIN_PYTHON $SCRIPT_PYTHON $archivo $CARPETA_DESTINO
 
 done
