@@ -7,7 +7,7 @@ CARPETA_DESTINO=$4
 
 mkdir -p $CARPETA_DESTINO
 
-find "$CARPETA" -type f -name "*.xlsx" | while IFS= read .r archivo; do
+find "$CARPETA" -type f -name "*.xlsx" | while IFS= read -r archivo; do
     
     NOMBRE_ARCHIVO=$(basename "$archivo")
 
