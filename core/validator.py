@@ -16,7 +16,7 @@ def reparar_archivo(archivo_entrada, archivo_salida):
 
     try:
         result = subprocess.run(
-            ['zip', '-FF', f'{archivo_entrada}', '--out', f'archivo_salida'],
+            ['zip', '-FF', f'{archivo_entrada}', '--out', f'{archivo_salida}'],
             input='y\n',
             text=True,
             capture_output=True
